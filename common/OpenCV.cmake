@@ -1,4 +1,4 @@
-if(APPLE)
+if(UNIX)
     # OpenCV found through PkgConfig
     find_package(PkgConfig)
     if(PKGCONFIG_FOUND)
