@@ -12,8 +12,7 @@ if(UNIX) # Mac or Linux
 
 elseif(WIN32)
     #--- PRE-COMPILED STATIC LIBRARIES
-    set(OpenCV2_FOUND TRUE)
-    include_directories("${EXTERNAL_ROOT}/OpenCV/include")
+    include_directories("${CMAKE_SOURCE_DIR}/external/OpenCV/include")
 
     set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
     set(CMAKE_CXX_FLAGS_RELEASE "/MT")
@@ -28,7 +27,14 @@ elseif(WIN32)
         optimized ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/zlib.lib
         debug ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/zlibd.lib)
 
-    list(APPEND ${COMMON_LIBS} ${CV_CORE} ${CV_GUI} ${ZLIB})
+    if(NOT COMMON_LIBS)
+        set(COMMON_LIBS ${CV_CORE} ${CV_GUI} ${ZLIB})
+    else()
+        list(APPEND ${COMMON_LIBS} ${CV_CORE})
+        list(APPEND ${COMMON_LIBS} ${CV_GUI})
+        list(APPEND ${COMMON_LIBS} ${ZLIB})
+    endif()
+    add_definitions(-DWITH_OPENCV)
 
     # if you want to use your own libraries
 #    include(FindOpenCV)
