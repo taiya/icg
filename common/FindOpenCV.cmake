@@ -45,14 +45,19 @@ ENDIF(WIN32)
 
 # select exactly ONE OpenCV 2 base directory
 # to avoid mixing different version headers and libs
+#
+# For the time being, we assume that in Windows, OpenCV was installed using the provided
+# installer. So we look for the main header under include/opencv2
 FIND_PATH(OpenCV2_ROOT_INC_DIR
-          NAMES opencv2/opencv.hpp
+          NAMES include/opencv2/opencv.hpp
           PATHS ${OpenCV2_POSSIBLE_ROOT_DIRS}
           )
 
+
 # Get parent of OpenCV2_ROOT_INC_DIR. We do this as it is more
 # reliable than finding include/opencv2/opencv.hpp directly.
-GET_FILENAME_COMPONENT(OpenCV2_ROOT_DIR ${OpenCV2_ROOT_INC_DIR} PATH)
+#GET_FILENAME_COMPONENT(OpenCV2_ROOT_DIR ${OpenCV2_ROOT_INC_DIR} PATH)
+set(OpenCV2_ROOT_DIR ${OpenCV2_ROOT_INC_DIR})
 
 FIND_PATH(OpenCV2_CORE_INCLUDE_DIR
           NAMES core_c.h core.hpp wimage.hpp eigen.hpp internal.hpp
@@ -91,9 +96,33 @@ FIND_PATH(OpenCV2_GPU_INCLUDE_DIR
           NAMES gpu.hpp
           PATHS "${OpenCV2_ROOT_DIR}/include/opencv2/gpu")
 
+      # Detect the compiler architecture that we're using.
+      if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+          message("Using 64 bit compiler")
+          set(EX_PLATFORM 64)
+          set(EX_PLATFORM_NAME "x64")
+      else()
+          message("Using 32 bit compiler")
+          set(EX_PLATFORM 32)
+          set(EX_PLATFORM_NAME "x86")
+      endif()
+
+      # Now look for MSVC version
+      if (MSVC10)
+          set(MSVC_VER "vc10")
+      elseif(MSVC11)
+          set(MSVC_VER "vc11")
+      elseif(MSVC12 OR MSVC14)
+          set(MSVC_VER "vc12")
+      else()
+          message(ERROR " Unsupported version of Visual Studio detected...")
+      endif()
+
+      # Finally, set the library paths.
+      set(OPENCV2_LIBRARY_SEARCH_PATHS "${OpenCV2_ROOT_DIR}/${EX_PLATFORM_NAME}/${MSVC_VER}/staticlib")
 
 # absolute path to all libraries 
-SET(OPENCV2_LIBRARY_SEARCH_PATHS "${OpenCV2_ROOT_DIR}/lib")
+#SET(OPENCV2_LIBRARY_SEARCH_PATHS "${OpenCV2_ROOT_DIR}/lib")
 
 IF(WIN32)
     SET(OPENCV2_LIBRARY_SEARCH_PATHS
@@ -101,47 +130,48 @@ IF(WIN32)
         "${OpenCV2_ROOT_DIR}/lib/Release"
         "${OpenCV2_ROOT_DIR}/lib/Debug"
         )
+
     FIND_LIBRARY(OpenCV2_CORE_LIBRARY
-                 NAMES opencv_core230 opencv_core220
+                 NAMES opencv_core2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_IMGPROC_LIBRARY
-                 NAMES opencv_imgproc230 opencv_imgproc220
+                 NAMES opencv_imgproc2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_FEATURES2D_LIBRARY
-                 NAMES opencv_features2d230 opencv_features2d220
+                 NAMES opencv_features2d2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_FLANN_LIBRARY
-                 NAMES opencv_flann230 opencv_flann220
+                 NAMES opencv_flann2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_CALIB3D_LIBRARY
-                 NAMES opencv_calib3d230 opencv_calib3d220
+                 NAMES opencv_calib3d2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_OBJDETECT_LIBRARY
-                 NAMES opencv_objdetect230 opencv_objdetect220
+                 NAMES opencv_objdetect2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_LEGACY_LIBRARY
-                 NAMES opencv_legacy230 opencv_legacy220
+                 NAMES opencv_legacy2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_CONTRIB_LIBRARY
-                 NAMES opencv_contrib230 opencv_contrib220
+                 NAMES opencv_contrib2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_HIGHGUI_LIBRARY
-                 NAMES opencv_highgui230 opencv_highgui220
+                 NAMES opencv_highgui2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_ML_LIBRARY
-                 NAMES opencv_ml230 opencv_ml220
+                 NAMES opencv_ml2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_VIDEO_LIBRARY
-                 NAMES opencv_video230 opencv_video220
+                 NAMES opencv_video2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_GPU_LIBRARY
-                 NAMES opencv_gpu230 opencv_gpu220
+                 NAMES opencv_gpu2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_FFMPEG_LIBRARY
-                 NAMES opencv_ffmpeg230 opencv_ffmpeg220
+                 NAMES opencv_ffmpeg2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
     FIND_LIBRARY(OpenCV2_TS_LIBRARY
-                 NAMES opencv_ts230 opencv_ts220
+                 NAMES opencv_ts2411
                  PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
 ELSE(WIN32)
     FIND_LIBRARY(OpenCV2_CORE_LIBRARY       NAMES opencv_core       PATHS ${OPENCV2_LIBRARY_SEARCH_PATHS})
@@ -210,7 +240,7 @@ IF(WIN32)
         )
     SET(OpenCV2_LIBRARIES
         ${OpenCV2_LIBRARIES}
-        ${OpenCV2_FFMPEG_LIBRARY}
+        #${OpenCV2_FFMPEG_LIBRARY}
         ${OpenCV2_TS_LIBRARY}
         )
 ENDIF(WIN32)
@@ -223,6 +253,7 @@ FOREACH(NAME ${OpenCV2_INCLUDE_DIRS})
 ENDFOREACH(NAME)
 FOREACH(NAME ${OpenCV2_LIBRARIES})
     IF(NOT EXISTS ${NAME})
+        message(STATUS "Not found: ${NAME}")
         SET(OpenCV2_FOUND OFF)
     ENDIF(NOT EXISTS ${NAME})
 ENDFOREACH(NAME)
@@ -256,7 +287,7 @@ MARK_AS_ADVANCED(FORCE
                  )
 IF(WIN32)
     MARK_AS_ADVANCED(FORCE
-                     OpenCV2_FFMPEG_LIBRARY
+        #OpenCV2_FFMPEG_LIBRARY
                      OpenCV2_TS_LIBRARY
                      )
 ENDIF(WIN32)
@@ -270,3 +301,4 @@ IF(NOT OpenCV2_FOUND)
         MESSAGE(STATUS "OpenCV 2 not found.")
     ENDIF(OpenCV2_FIND_REQUIRED)
 ENDIF(NOT OpenCV2_FOUND)
+

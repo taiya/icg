@@ -1,4 +1,4 @@
-if(UNIX)
+if(UNIX) # Mac or Linux
     # OpenCV found through PkgConfig
     find_package(PkgConfig)
     if(PKGCONFIG_FOUND)
@@ -9,6 +9,36 @@ if(UNIX)
             add_definitions(-DWITH_OPENCV)
         endif()
     endif()
+
+elseif(WIN32)
+    #--- PRE-COMPILED STATIC LIBRARIES
+    set(OpenCV2_FOUND TRUE)
+    include_directories("${EXTERNAL_ROOT}/OpenCV/include")
+
+    set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+    set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+
+    set(CV_CORE 
+        optimized ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/opencv_core2411.lib
+        debug ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/opencv_core2411d.lib)
+    set(CV_GUI
+        optimized ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/opencv_highgui2411.lib
+        debug ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/opencv_highgui2411d.lib)
+    set(ZLIB
+        optimized ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/zlib.lib
+        debug ${CMAKE_SOURCE_DIR}/external/OpenCV/lib/zlibd.lib)
+
+    list(APPEND ${COMMON_LIBS} ${CV_CORE} ${CV_GUI} ${ZLIB})
+
+    # if you want to use your own libraries
+#    include(FindOpenCV)
+#    if(OpenCV2_FOUND)
+#        list(APPEND COMMON_LIBS ${OpenCV2_LIBRARIES})
+#        include_directories(${OpenCV2_INCLUDE_DIRS})
+#        add_definitions(-DWITH_OPENCV)
+#    else()
+#        message(ERROR " Could not find OpenCV")
+#    endif()
 else()
-    message(ERROR "FindOpenCV necessary")
+    message(ERROR " Unknown platform.")
 endif()
