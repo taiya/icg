@@ -8,7 +8,7 @@ Nonetheless, we do discourage it, _especially_ in the beginning, as it might tak
 - https://github.com/luckysama/icg/wiki/Compile-Linux
 - https://github.com/luckysama/icg/wiki/Compile-Windows
 
-**note:** currently windows has some issues with OpenCV. It should be solved monday, but if you want you can start on the assignment by working on the lab machine.
+**note:** ~~currently windows has some issues with OpenCV.~~ SOLVED!
 
 # Compile Problems?
 You can use the github issue pane to report/discuss problems compiling:
