@@ -27,6 +27,7 @@ Shape &Shape::operator=(const Shape &shape){
     this->_size = shape._size;
     for (int i = 0; i < 3; ++i) 
         this->_color[i] = shape._color[i];
+    return *this;
 }
 
 void Shape::operator*(const float scale){
