@@ -8,5 +8,6 @@ include(common/OpenCV.cmake)
 include(common/OpenGP.cmake)
 
 #--- Subprojects
+add_subdirectory(introcpp)
 add_subdirectory(raytrace)
 add_subdirectory(trimeshio)
