@@ -8,8 +8,9 @@ int main(int, char**){
     std::cout << std::setprecision(2) << std::setw(2) << std::fixed;
     
     Surface_mesh mesh;
-    // mesh.read("bunny.obj");
-    mesh.read("sphere.obj");
+//    mesh.read("bunny.obj");
+//    mesh.read("sphere.obj");
+    mesh.read("triangle.obj");
     mesh.triangulate();
     mesh.update_face_normals();
     mesh.update_vertex_normals();
