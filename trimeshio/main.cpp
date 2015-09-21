@@ -30,7 +30,5 @@ int main(int, char**){
         }
     }
     
-    mesh.write("test.obj");
-    
     return 0;
 }
