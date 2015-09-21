@@ -5,6 +5,8 @@ project(icg)
 include(common/config.cmake)
 include(common/Eigen.cmake)
 include(common/OpenCV.cmake)
+include(common/OpenGP.cmake)
 
 #--- Subprojects
 add_subdirectory(raytrace)
+add_subdirectory(trimeshio)
