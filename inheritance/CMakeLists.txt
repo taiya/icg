@@ -1,8 +1,4 @@
 get_filename_component(EXERCISENAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 file(GLOB_RECURSE SOURCES "*.cpp")
 file(GLOB_RECURSE HEADERS "*.h")
-file(GLOB_RECURSE MODELS "*.obj")
-add_custom_target(shaders SOURCES ${MODELS})
 add_executable(${EXERCISENAME} ${SOURCES} ${HEADERS})
-target_link_libraries(${EXERCISENAME} ${COMMON_LIBS})
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_LIST_DIR})
