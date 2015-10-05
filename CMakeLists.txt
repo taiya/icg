@@ -7,6 +7,11 @@ include(common/Eigen.cmake)
 include(common/OpenCV.cmake)
 include(common/OpenGP.cmake)
 
+#--- OpenGL configuration
+include(common/OpenGL.cmake)
+include(common/GLEW.cmake)
+include(common/GLFW.cmake)
+
 #--- Subprojects
 add_subdirectory(introcpp)
 add_subdirectory(inheritance)
