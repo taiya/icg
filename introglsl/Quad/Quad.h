@@ -80,7 +80,11 @@ public:
     
     void draw(){
         glUseProgram(_pid);
-        glBindVertexArray(_vao);        
+        glBindVertexArray(_vao);
+            ///--- Uniform for animation
+            float t = glfwGetTime();
+            glUniform1f(glGetUniformLocation(_pid, "time"), t);
+        
             ///--- Bind textures
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, _tex);

@@ -80,3 +80,6 @@ src/raytrace/output.png
 /shadow/shadow
 
 /trimeshio/trimeshio
+
+/helloglsl/helloglsl
+/introglsl/introglsl
