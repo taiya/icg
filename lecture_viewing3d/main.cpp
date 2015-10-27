@@ -14,18 +14,9 @@ void init(){
 
 void display(){
     opengp::update_title_fps("lecture_viewing3d");   
-    glViewport(0,0,window_width,window_height);
-    
-    ///--- Setup view-projection matrix
-    float ratio = window_width / (float) window_height;
-    static mat4 projection = Eigen::perspective(45.0f, ratio, 0.1f, 10.0f);
-    vec3 cam_pos(2.0f, 2.0f, 2.0f);
-    vec3 cam_look(0.0f, 0.0f, 0.0f);
-    vec3 cam_up(0.0f, 0.0f, 1.0f);
-    mat4 view = Eigen::lookAt(cam_pos, cam_look, cam_up);
-    
+    glViewport(0,0,window_width,window_height);    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    mesh.draw(mat4::Identity(), view, projection);
+    mesh.draw();
 }
 
 void cleanup(){}
