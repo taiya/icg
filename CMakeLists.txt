@@ -23,4 +23,6 @@ include(common/GLFW.cmake)
 #add_subdirectory(introglsl)
 #add_subdirectory(planets)
 #add_subdirectory(pointpick)
-add_subdirectory(framebuffer2d)
+#add_subdirectory(framebuffer2d)
+add_subdirectory(lecture_viewing3d)
+
