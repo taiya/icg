@@ -155,7 +155,7 @@ namespace{
     }
 }
 
-void glfwTrackball(void (*update_matrices)(const Eigen::Matrix4f& )){
+inline void glfwTrackball(void (*update_matrices)(const Eigen::Matrix4f& )){
     hook_trackball_callbacks(update_matrices);
 }
 
