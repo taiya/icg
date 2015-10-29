@@ -50,11 +50,12 @@ mat4 VIEW = mat4(1);
 mat4 PROJ = mat4(1);
 
 void main() {
-    VIEW = lookat( 2*vec3(cos(time),0,sin(time)), vec3(0,0,0), vec3(0,1,0));
-    // VIEW = lookat( vec3(0,0,-2), vec3(0,0,0), vec3(0,1,0));
-    float near = .2;
+    // VIEW = lookat( 2*vec3(cos(time),0,sin(time)), vec3(0,0,0), vec3(0,1,0));
+    VIEW = lookat( vec3(0,0,-2), vec3(0,0,0), vec3(0,1,0));
+    MODEL = mat4(1);
+    float near = 1.0;
     float far = 3.5;
-    PROJ = ortho(-1,+1, -1,+1, near,far) * persp(near, far);
+    PROJ = ortho(-.5,+.5, -.5,+.5, near,far) * persp(near, far);
     
     fpoint = vpoint + .5; ///< For Debug [0,1]^3 
     fnormal_cam = inverse( transpose( mat3(VIEW * MODEL) )) * vnormal; 
