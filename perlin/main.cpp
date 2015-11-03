@@ -8,7 +8,7 @@ int main(int, char**){
 
 
     //This is a demo code for using the EigenVisualizer namespace
-    //TODO: change the following code so we can make a single frequency perlin nose
+    //TODO: change the following code so we can make a single frequency perlin noise
     RGBImage image(512, 512);
 
     for (int i = 0; i < 512; ++ i)
