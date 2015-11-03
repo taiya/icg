@@ -250,8 +250,8 @@ Eigen::Matrix<Scalar,4,4> ortho(Scalar left, Scalar right, Scalar bottom, Scalar
   tr(1,1) = 2.0 / (top - bottom);
   tr(2,2) = -2.0 / (zFar - zNear);
   tr(3,3) = 1.0;
-  tr(1,3) = -(right + left) / (right - left);
-  tr(2,3) = -(top + bottom) / (top - bottom);
+  tr(0,3) = -(right + left) / (right - left);
+  tr(1,3) = -(top + bottom) / (top - bottom);
   tr(2,3) = -(zFar + zNear) / (zFar - zNear);
   return tr.matrix();
 }
