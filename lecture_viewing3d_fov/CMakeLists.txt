@@ -9,4 +9,4 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_LIST_DIR})
 
 #--- See meshes in project
 file(GLOB_RECURSE MESHES "*.obj")
-add_custom_target(dummy_meshes SOURCES ${MESHES})
+add_custom_target(dummy_meshes_${EXERCISENAME} SOURCES ${MESHES})

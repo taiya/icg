@@ -21,21 +21,11 @@ void display(){
 
 void cleanup(){}
 
-void keyboard(int key, int action){
-    if(action != GLFW_RELEASE) return; ///< only act on release
-    switch(key){
-        case '0': break;
-        default: break;
-    }
-}
-
 int main(int, char**){
     glfwInitWindowSize(window_width, window_height);
     glfwCreateWindow();
     glfwDisplayFunc(display);
-    glfwSetKeyCallback(keyboard);
     init();
-    keyboard(GLFW_KEY_KP_1, 0);
     glfwMainLoop();
     cleanup();
     return EXIT_SUCCESS;
